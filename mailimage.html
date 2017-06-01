@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>html for button in email Generator</title>
+<!-- inject:head:html -->
+                        <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="dist/style.css" rel="stylesheet">
+    <script src="dist/all.js"></script>
+
+                    <!-- endinject -->
+</head>
+<body>
+
+  </head>
+  <body>
+<!-- inject:nav:html -->
+<nav class = "navbar navbar-default" role = "navigation">
+<div class="container-fluid">
+   
+   <div class = "navbar-header">
+      <a class = "navbar-brand" href = "index.html">Code snippets</a>
+   </div>
+   
+   <div>
+      <ul class = "nav navbar-nav">
+         <li><a href ="mailbutton.html">Button in email</a></li>
+         <li><a href ="button.html">Button in website</a></li>
+         <li><a href ="mailimage.html">Image in email</a></li>
+      </ul>
+   </div>
+</div>
+</nav>
+
+<!-- endinject -->
+    <div id="app" class="container" role="main">
+      <div class="row">
+        <div class="col-md-6"><vue-form v-on:submit.prevent="copy" :state="formstate">
+          <div class="panel panel-default"><div class="panel-heading">{{ name }}
+              <div class="btn-group" id="btn-generate"></div>
+            </div>
+            <div class="panel-body">
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.imgUrl)">
+                  <label for="imgUrl" class="control-label">Image url </label>
+                  <input type="url" placeholder="https://www.wemove.eu/..." class="form-control" name="imgUrl" v-model="imgUrl" https-only>
+                  <field-messages name="imgUrl" show="$touched || $submitted" class="help-block">
+                    <span slot="required">Pick a position</span>
+                    <div slot="url">This is not a valid url. </div>
+                    <div slot="https-only">Dude! Security and privacy matter! It must start with https...</div>
+                  </field-messages>
+                </validate>                
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.position)">
+                  <label class="control-label" for="pos">Position</label><br>
+		  <div class="btn-group" data-toggle="buttons" v-radio="position">
+		    <label class="btn btn-primary">
+		      <input type="radio" name="pos" id="left" value="left"> <img src="img/img-left.png" />
+		    </label>
+		    <label class="btn btn-primary">
+		      <input type="radio" name="pos" id="center" value="center"> <img src="img/img-center.png" />
+		    </label>
+		    <label class="btn btn-primary">
+		      <input type="radio" name="pos" id="right" value="right"> <img src="img/img-right.png" />
+		    </label>
+		  </div>
+                  <field-messages name="position" show="$touched || $submitted" class="help-block">
+                    <span slot="required">Pick a position</span>
+                  </field-messages>
+                </validate>                
+                <validate auto-label class="form-group" :class="fieldClassName(formstate.linkUrl)">
+                  <label for="linkUrl" class="control-label">Link url (optional)</label>
+                  <input type="url" placeholder="https://act.wemove.eu/..." class="form-control" name="linkUrl" v-model="linkUrl" https-only>
+                  <field-messages name="linkUrl" show="$touched || $submitted" class="help-block">
+                     <div slot="url">This is not a valid url.</div>
+                     <div slot="https-only">Dude! Security and privacy matter! It must start with https...</div>
+                  </field-messages>
+                </validate>                
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.width)">
+                  <label for="width" class="control-label">Width</label>
+                  <input type="text" class="form-control" name="width" v-model="width">
+                  <field-messages name="imgUrl" show="$touched || $submitted" class="help-block">
+                    <span slot="required">The image must have a size</span>
+                  </field-messages>
+                </validate>                
+            </div>
+            <div class="panel-footer"><button type="submit" class="button btn-primary" id="copy">Generate & Copy</button><span class="text-success pull-right" v-if="copied">And paste it where due.</span></div>
+          </div>
+        </form></div>
+
+        <div class="col-md-6">
+	  <h3>Html Code</h3>
+	  <textarea id="html" class="form-control">{{ html }}</textarea>
+
+          <h3>Result</h3>
+	    <div class="hidden" id="result-wrapper">
+	      <div><a :href="linkUrl"><img :src="imgUrl" :width="width" /></a></div>
+	    </div>
+
+	    <div id="example" class="well" style="overflow: hidden">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
+
+<img>
+
+<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+	    </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+'use strict';
+
+Vue.use(VueForm, {
+  validators: {
+    'https-only': function (value, attrValue, vnode) {
+      return (value.indexOf("https://") == 0);
+    }
+  },
+  inputClasses: {
+    valid: 'form-control-success',
+    invalid: 'form-control-danger'
+  }
+});
+
+Vue.directive('radio', {
+  bind: function(el, binding, vnode) {
+      var btns = $(el).find('.btn');
+      btns.each(function() {
+          $(this).on('click', function() {
+              var v = $(this).find('input').get(0).value
+              app[binding.expression] = v;
+          })
+      });
+  },
+  update: function(el, binding, vnode) {
+      var value = binding.value;
+      if (value) {
+          //this.set(value);
+          var btns = $(el).find('.btn')
+          btns.each(function() {
+              $(this).removeClass('active');
+              var v = $(this).find('input').get(0).value;
+
+              if (v === value) {
+                  $(this).addClass('active');
+              }
+          });
+      }
+  }
+});
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    formstate: {},
+    position: 'center',
+    imgUrl: "",
+    linkUrl: "",
+    copied: false,
+    html: "fill the form, and click on copy. you can then paste your html code in civimail ",
+    width: "300",
+    name: "Generate HTML for an image"
+  },
+  computed: {
+    resultStyle: function() {
+      var style = "margin: 1em; "
+      if (app.position != 'center') {
+	return style + 'float: ' + app.position;
+      }
+      return style + 'text-align: center';
+    }
+  },
+  updated: function() {
+      var selector = '#result-wrapper';
+      if (app.position != 'center') {
+	selector += ' div';
+	if (!app.linkUrl) {
+	  selector += ' a';
+	}
+	var $wrapper = $(selector).clone();
+      } else {
+	var $wrapper = $(selector).clone();
+	if (!app.linkUrl) {
+	  $wrapper.find('div').html($wrapper.find('a').html());
+	}
+      }
+      $wrapper.children().attr('style', app.resultStyle);
+      var html = $wrapper.html();
+      $("#example :not(p)").remove();
+      $("#example p").eq(0).after(html);
+      app.html = html;
+  },
+  methods: {
+    fieldClassName: function (field) {
+      if(!field) {
+        return '';
+      }
+      if((field.$touched || field.$submitted) && field.$valid) {
+        return 'has-success';
+      }
+      if((field.$touched || field.$submitted) && field.$invalid) {
+        return 'has-error';
+      }
+    },
+    copy: function() {
+      var v=this;
+      clipboard.copy(app.html).then(
+        function(){v.copied=true;},
+        function(err){console.log("failure", err);}
+      );
+    }
+  }
+});
+    </script>
+  </body>
+</html>
+
