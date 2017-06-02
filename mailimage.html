@@ -11,6 +11,14 @@
     <script src="dist/all.js"></script>
 
                     <!-- endinject -->
+    <style>
+      legend {
+	border: initial;
+	display: initial;
+	margin: initial;
+      }
+    </style>
+
 </head>
 <body>
 
@@ -55,19 +63,32 @@
                   <label class="control-label" for="pos">Position</label><br>
 		  <div class="btn-group" data-toggle="buttons" v-radio="position">
 		    <label class="btn btn-primary">
-		      <input type="radio" name="pos" id="left" value="left"> <img src="img/img-left.png" />
+		      <input type="radio" name="pos" id="left" value="left"> <img src="img/img-left.png" width="64"/>
 		    </label>
 		    <label class="btn btn-primary">
-		      <input type="radio" name="pos" id="center" value="center"> <img src="img/img-center.png" />
+		      <input type="radio" name="pos" id="center" value="center"> <img src="img/img-center.png" width="64"/>
 		    </label>
 		    <label class="btn btn-primary">
-		      <input type="radio" name="pos" id="right" value="right"> <img src="img/img-right.png" />
+		      <input type="radio" name="pos" id="right" value="right"> <img src="img/img-right.png" width="64"/>
 		    </label>
 		  </div>
                   <field-messages name="position" show="$touched || $submitted" class="help-block">
                     <span slot="required">Pick a position</span>
                   </field-messages>
                 </validate>                
+		<div class="form-group">
+		  <label class="control-label" for="alt">Alternative text (optional)</label>
+		  <div class="input-group">
+		    <input type="text" name="alt" class="form-control" v-model="alt">
+		    <span class="input-group-btn">
+		      <button class="btn btn-default" type="button" v-on:click="legend=alt">Copy to legend</button>
+		    </span>
+		  </div>
+		</div>
+		<div class="form-group">
+		  <label class="control-label" for="legend">Legend (optional)</label>
+		  <input type="text" name="legend" class="form-control" v-model="legend">
+		</div>
                 <validate auto-label class="form-group" :class="fieldClassName(formstate.linkUrl)">
                   <label for="linkUrl" class="control-label">Link url (optional)</label>
                   <input type="url" placeholder="https://act.wemove.eu/..." class="form-control" name="linkUrl" v-model="linkUrl" https-only>
@@ -96,7 +117,10 @@
 
           <h3>Result</h3>
 	    <div class="hidden" id="result-wrapper">
-	      <div><a :href="linkUrl"><img :src="imgUrl" :width="width" /></a></div>
+	      <div>
+		<a :href="linkUrl"><img :src="imgUrl" :width="width" :alt="alt" :title="alt"/></a>
+		<legend v-if="legend" :style="legendStyle">{{ legend }}</legend>
+	      </div>
 	    </div>
 
 	    <div id="example" class="well" style="overflow: hidden">
@@ -158,8 +182,10 @@ var app = new Vue({
   el: '#app',
   data: {
     formstate: {},
-    position: 'center',
     imgUrl: "",
+    position: 'center',
+    alt: "",
+    legend: "",
     linkUrl: "",
     copied: false,
     html: "fill the form, and click on copy. you can then paste your html code in civimail ",
@@ -173,21 +199,19 @@ var app = new Vue({
 	return style + 'float: ' + app.position;
       }
       return style + 'text-align: center';
+    },
+    legendStyle: function() {
+      var style = "display: block; margin: auto; font-size: .8em; width: " + app.width;
+      if (!app.width.endsWith('%')) {
+	style += 'px';
+      }
+      return style;
     }
   },
   updated: function() {
-      var selector = '#result-wrapper';
-      if (app.position != 'center') {
-	selector += ' div';
-	if (!app.linkUrl) {
-	  selector += ' a';
-	}
-	var $wrapper = $(selector).clone();
-      } else {
-	var $wrapper = $(selector).clone();
-	if (!app.linkUrl) {
-	  $wrapper.find('div').html($wrapper.find('a').html());
-	}
+      var $wrapper = $( '#result-wrapper').clone();
+      if (!app.linkUrl) {
+	$wrapper.find('div').prepend($wrapper.find('a').detach().html());
       }
       $wrapper.children().attr('style', app.resultStyle);
       var html = $wrapper.html();
