@@ -1,0 +1,257 @@
+body,
+html {
+	height: 100%;
+}
+
+.container.main {
+	min-height: 100%;
+	margin-bottom: 40px;
+}
+
+.alert {
+	padding: 8px 25px 8px 25px;
+	text-align: center;
+}
+
+.footer {
+	font-family: "domus-titling-web",'Helvetica Neue', sans-serif;
+	font-size: 12px;
+	text-align: center;
+	height: 60px;
+	margin-top: -60px;
+	padding: 0 25px 0 25px;
+}
+
+.footer p {
+	margin: 0 0 5px 0;
+}
+
+h1 {
+	height: 110px;
+	opacity: 1;
+	overflow: hidden;
+	-webkit-transition-property: height, padding, margin, opacity;
+	-moz-transition-property: height, padding, margin, opacity;
+	-ms-transition-property: height, padding, margin, opacity;
+	-o-transition-property: height, padding, margin, opacity;
+	transition-property: height, padding, margin, opacity;
+	-webkit-transition-delay: 400ms;
+	-moz-transition-delay: 400ms;
+	-ms-transition-delay: 400ms;
+	-o-transition-delay: 400ms;
+	transition-delay: 400ms;
+	-webkit-transition-duration: 600ms;
+	-moz-transition-duration: 600ms;
+	-ms-transition-duration: 600ms;
+	-o-transition-duration: 600ms;
+	transition-duration: 600ms;
+	font-size: 120px;
+	margin: 0;
+	padding-top: 30px;
+	margin-bottom: -25px;
+}
+
+h2,
+h3 {
+	font-family: "domus-titling-web",'Helvetica Neue', sans-serif;
+}
+
+body.embed form,
+body.embed h1 {
+	display: none;
+}
+
+.permalink form {
+	opacity: 0.6;
+}
+
+.form-extra {
+	display: none;
+}
+
+.permalink input.input-xlarge {
+	height: 30px;
+	font-size: 24px;
+	line-height: 24px;
+
+	-webkit-transition-property: height, font-size;
+	-moz-transition-property: height, font-size;
+	-ms-transition-property: height, font-size;
+	-o-transition-property: height, font-size;
+	transition-property: height, font-size;
+	-webkit-transition-delay: 300ms;
+	-moz-transition-delay: 300ms;
+	-ms-transition-delay: 300ms;
+	-o-transition-delay: 300ms;
+	transition-delay: 300ms;
+	-webkit-transition-duration: 700ms;
+	-moz-transition-duration: 700ms;
+	-ms-transition-duration: 700ms;
+	-o-transition-duration: 700ms;
+	transition-duration: 700ms;
+}
+
+.header {
+	font-family: "domus-titling-web",'Helvetica Neue', sans-serif;
+	font-size: 18px;
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+body.permalink .header p {
+	margin-top: 20px;
+}
+
+.header hr {
+	border: none;
+	height: 1px;
+	background: -webkit-linear-gradient( left, rgba( 230, 230, 230, 0 ), rgba( 230, 230, 230, 1 ), rgba( 230, 230, 230, 0 ) );
+	background: -moz-linear-gradient( left, rgba( 230, 230, 230, 0 ), rgba( 230, 230, 230, 1 ), rgba( 230, 230, 230, 0 ) );
+	background: -ms-linear-gradient( left, rgba( 230, 230, 230, 0 ), rgba( 230, 230, 230, 1 ), rgba( 230, 230, 230, 0 ) );
+	background: -o-linear-gradient( left, rgba( 230, 230, 230, 0 ), rgba( 230, 230, 230, 1 ), rgba( 230, 230, 230, 0 ) );
+	background: linear-gradient( left, rgba( 230, 230, 230, 0 ), rgba( 230, 230, 230, 1 ), rgba( 230, 230, 230, 0 ) );
+	margin-top: 0;
+}
+
+#conconjr {
+	margin-top: 20px;
+}
+
+.permalink h1 {
+	opacity: 0;
+	height: 0;
+	padding: 0;
+	margin: 0;
+}
+
+.results {
+	margin-bottom: 40px;
+}
+
+.result {
+	position: relative;
+	height: 260px;
+	overflow: hidden;
+	font-family: 'Helvetica Neue', sans-serif;
+}
+
+.result h3 {
+	float: left;
+	margin: 5px 0 0 5px;
+}
+
+
+.index .result.winner {
+	box-shadow: 0 0 6px 1px #31CE00;
+	padding: 0 20px;
+	box-sizing: border-box;
+	border-radius: 2px;
+}
+
+.average {
+	position: relative;
+	float: left;
+	clear: both;
+	margin-top: 10px;
+	font-size: 72px;
+	line-height: 1em;
+	font-weight: 100;
+	text-rendering: optimizeLegibility;
+	color: #888;
+	z-index: 100;
+}
+
+.query-input,
+.range {
+	position: relative;
+	float: left;
+	clear: both;
+	margin-left: 6px;
+	font-size: 18px;
+	line-height: 1em;
+	font-weight: 200;
+	color: #bbb;
+	z-index: 100;
+}
+
+.chart-image {
+	margin: 0 auto;
+	display: block;
+	position: absolute;
+	/*top: -67px;*/
+	top: -30px;
+	right: -60px;
+	z-index: -1;
+}
+
+input.input-xlarge {
+	height: 50px;
+	font-size: 34px;
+	line-height: 45px;
+	padding-left: 12px;
+	width: 98%;
+}
+
+input:-moz-placeholder{
+ 	color: rgba(0, 0, 0, 0.1);
+}
+
+input:-ms-input-placeholder{
+ 	color: rgba(0, 0, 0, 0.1);
+}
+
+input::-webkit-input-placeholder{
+	color: rgba(0, 0, 0, 0.1);
+}
+/* Large desktops are better than you */
+@media (min-width: 1200px) {
+	.average {
+		font-size: 72px;
+	}
+}
+
+/* Small desktops can go screw themselves */
+/* And by that I mean we'll make the fonts look nice */
+@media (min-width: 980px) and (max-width: 1199px) {
+	.average {
+		font-size: 60px;
+	}
+}
+
+/* Portrait tablet to landscape and desktop */
+/* The other terrible in-between size */
+@media (min-width: 768px) and (max-width: 979px) {
+	.chart-image {
+		/*max-width: 90%;*/
+		top: -5px;
+	}
+
+	.average {
+		font-size: 48px;
+	}
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) {
+	input.input-xlarge {
+		width: 100%;
+	}
+}
+
+/* Landscape phones and down */
+@media (max-width: 560px) {
+	h1 {
+		font-size: 70px;
+	}
+	.result {
+		height: auto;
+	}
+	.chart-image {
+		position: relative;
+		float: left;
+		margin-top: -40px;
+		top: 0;
+		right: 0;
+		max-width: auto;
+	}
+}

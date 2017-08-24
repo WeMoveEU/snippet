@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>IsValid | Quantify the results of A/B tests</title>
+
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+		<!-- Styles -->
+		<link href="static/css/styles.min.css" rel="stylesheet">
+		<?php if ( $embed ): ?>
+		<link href="static/css/embed.min.css" rel="stylesheet">
+		<?php endif; ?>
+
+	</head>
+	<body class="permalink index">
+		<div class="container main">
+			<!-- Header -->
+			<div class="header">
+				<input class="input-xlarge" type="text" id="name" tabindex="1" placeholder="Name of your experiment">
+				<canvas id="conconjr" width="250" height="30">CON CON NEVER HAS BUGS. IT IS YOUR BROWSER THAT HAS BUGS.</canvas>
+				<hr />
+				<p>Quantify experiment results</p>
+			</div>
+
+			<form class="horizontal-form">
+			<div class="row">
+				<div class="span6">
+					<h2>Samples</h2>
+					<div class="control-group">
+						<input class="input-xlarge" type="text" id="control-samples" tabindex="1" placeholder="Variant A">
+					</div>
+					<div class="control-group">
+						<input class="input-xlarge" type="text" id="experiment-samples" tabindex="3" placeholder="Variant B">
+					</div>
+				</div>
+				<div class="span6">
+					<h2>Conversions</h2>
+					<div class="control-group">
+						<input class="input-xlarge" type="text" id="control-conversions" tabindex="2" placeholder="Variant A">
+					</div>
+					<div class="control-group">
+						<input class="input-xlarge" type="text" id="experiment-conversions" tabindex="4" placeholder="Variant B">
+					</div>
+				</div>
+				<div class="span6 offset3 form-extra">
+					<h3 class="label-extra">Significance Requirement</h3>
+					<input class="input-xlarge" type="text" id="significance" tabindex="5" placeholder="95% (optional)">
+				</div>
+			</div>
+			</form>
+			<div class="row">
+				<div class="span4 offset4 alert alert-info" style="display:none;">Results will automatically load when you fill in each field</div>
+			</div>
+			<div class="results"></div>
+		</div> <!-- /container -->
+		<div class="container">
+			<div class="row footer">
+	<script async src="static/js/scripts.min.js"></script>
+			</div>
+		</div>
+	<?php print_footer_scripts(); ?>
+	</body>
+</html>
