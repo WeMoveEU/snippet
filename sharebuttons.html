@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>html for button in email Generator</title>
+<!-- inject:head:html -->
+                            <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="dist/style.css" rel="stylesheet">
+    <script src="dist/all.js"></script>
+
+                        <!-- endinject -->
+</head>
+<body>
+
+  </head>
+  <body>
+<!-- inject:nav:html -->
+<nav class = "navbar navbar-default" role = "navigation">
+<div class="container-fluid">
+   
+   <div class = "navbar-header">
+      <a class = "navbar-brand" href = "index.html">Code snippets</a>
+   </div>
+   
+   <div>
+      <ul class = "nav navbar-nav">
+         <li><a href ="mailbutton.html">Button in email</a></li>
+         <li><a href ="button.html">Button in website</a></li>
+         <li><a href ="mailimage.html">Image in email</a></li>
+         <li><a href ="sharebuttons.html">Share buttons</a></li>
+      </ul>
+   </div>
+</div>
+</nav>
+
+<!-- endinject -->
+    <div id="app" class="container" role="main">
+      <div class="row">
+        <div class="col-md-6"><vue-form v-on:submit.prevent="copy" :state="formstate">
+          <div class="panel panel-default"><div class="panel-heading">{{ name }}
+              <div class="btn-group" id="btn-generate"></div>
+            </div>
+            <div class="panel-body">
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.utm)">
+                  <label class="control-label" for="utm">utm campaign</label>
+                  <input type="text" required class="form-control" name="utm" id="utm" v-model="utm_campaign" v-on:input="htmlg()">
+                  <field-messages name="utm" show="$touched || $submitted" class="help-block">
+                    <span slot="required">utm is a required field</span>
+                  </field-messages>
+                </validate>
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.mailingid)">
+                  <label class="control-label" for="mailingid">Mailing id</label>
+                  <input type="text" required class="form-control" name="mailingid" id="mailingid" v-model="mailingid" v-on:input="htmlg()">
+                  <field-messages name="mailingid" show="$touched || $submitted" class="help-block">
+                    <span slot="required">Mailing id is a required field</span>
+                  </field-messages>
+                </validate>
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.url)">
+                  <label for="url" class="control-label">Url</label>
+                  <input type="url" placeholder="https://act.wemove.eu/..." required class="form-control" name="url" v-model="url" https-only v-on:input="htmlg()">
+                  <field-messages name="url" show="$touched || $submitted" class="help-block">
+                    <span slot="required">You know a call to action should go somewhere, right?</span>
+                     <div slot="url">This is not a valid url. you know, it should start with https://www.wemove.eu...</div>
+                     <div slot="https-only">Dude! Security and privacy matter! It must start with https...</div>
+                  </field-messages>
+                </validate>                
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.tweet)">
+                  <label class="control-label" for="text">Tweet</label>
+                  <input  required type="text" class="form-control" name="tweet" v-model="tweet" v-on:input="htmlg()">
+                  <field-messages name="tweet" show="$touched || $submitted" class="help-block">
+                    <span slot="required">Really? without a tweet?!</span>
+                  </field-messages>
+                </validate>                
+                <div class="form-group">
+                  <label>Size</label>
+                  <select v-model="size"  v-on:change="htmlg()" class="form-control">
+                    <option v-for="size in sizes" v-bind:value="size.value">
+                    {{ size.text }}
+                    </option>
+                  </select>
+                </div>
+            </div>
+            <div class="panel-footer"><button type="submit" class="button btn-primary" id="copy">Generate</button></div>
+          </div>
+        </form></div>
+        <div class="col-md-6">
+          <h3>Result</h3>
+<div class="form-group">
+<input :value="trackedUrl"  class="form-control" disabled>
+</div>
+<textarea class="hidden" id="mso">
+</textarea>
+<!--[if mso]>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" :href="fbUrl" :style="msostyle" arcsize="5%" :strokecolor="color" :fillcolor="color">
+<w:anchorlock/>
+<center style="color:#ffffff;font-family:Helvetica, Arial,sans-serif;font-size:16px;">{{ label }}</center>
+</v:roundrect>
+<![endif]-->
+              <div id="fb_example" class="well">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td>
+                      <div>
+                        <span v-html="msoplaceholder"></span> <center><a :href="fbUrl" :style="fbStyle" target="_blank">Share on Facebook</a></center>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <div id="twitter_example" class="well">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td>
+                      <div>
+                        <span v-html="msoplaceholder"></span> <center><a :href="twitterUrl" :style="twitterStyle" target="_blank">Share on twitter</a></center>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <h3>Html Code</h3>
+              <h4>Facebook</h4>
+              <textarea id="fb" class="form-control">{{ html_fb }}</textarea>
+              <h4>Twitter</h4>
+              <textarea id="twitter" class="form-control">{{ html_twitter }}</textarea>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+'use strict';
+
+
+var today= function () {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+
+  if(dd<10) {
+      dd='0'+dd
+  } 
+
+  if(mm<10) {
+      mm='0'+mm
+  } 
+
+  return ''+yyyy+mm+dd;
+};
+
+Vue.use(VueForm, {
+  validators: {
+    'https-only': function (value, attrValue, vnode) {
+      return (value.indexOf("https://") == 0);
+    }
+  },
+  inputClasses: {
+    valid: 'form-control-success',
+    invalid: 'form-control-danger'
+  }
+});
+  
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    msoplaceholder:'<span id="msoplaceholder"></span>',
+    formstate: {},
+    utm_campaign: "en_"+today(),
+    mailingid: "",
+    url: "",
+    tweet: "Call to action... Now!",
+    copied: false,
+    html_fb: "",
+    html_twitter: "",
+    size:"300px",
+    fb_color: "#3b5998",
+    twitter_color: "#1da1f2",
+    sizes: [{value:"200px",text:"200 pixels"},{value:"300px",text:"300 pixels"},{value:"500px",text:"500 pixels"},{value:"60%",text:"60% -warning, you need to test in your email"}, {value:"90%",text:"90% -warning, you need to test in your email"}],
+    name: 'Generate share buttons'
+  },
+    computed: {
+      trackedUrl: function () {
+        var separator  = this.url.indexOf("?") === -1 ? "?" : "&";
+        return this.url + separator + "utm_campaign=" + this.utm_campaign + "&utm_source=civimail-" + this.mailingid;
+      },
+      fbUrl: function() {
+        return "https://www.facebook.com/sharer.php?u=" + encodeURIComponent(this.trackedUrl + "&utm_medium=facebook");
+      },
+      twitterUrl: function() {
+        return "https://twitter.com/intent/tweet?text=" + encodeURIComponent(this.tweet + ' ' + this.trackedUrl + "&utm_medium=twitter");
+      },
+      msostyle: function () {
+        return {
+          height:"50px","v-text-anchor":"middle","width":this.size
+        }
+      },
+      twitterStyle: function() {
+        return this.style(this.twitter_color);
+      },
+      fbStyle: function() {
+        return this.style(this.fb_color);
+      }
+    },
+    methods: {
+      fieldClassName: function (field) {
+        if(!field) {
+          return '';
+        }
+        if((field.$touched || field.$submitted) && field.$valid) {
+          return 'has-success';
+        }
+        if((field.$touched || field.$submitted) && field.$invalid) {
+          return 'has-error';
+        }
+      },
+      style: function (color) {
+        return {
+          "background-color": color,
+          "border": "1px solid " + color,
+          "width": this.size,
+          "border-radius":"3px",    "color":"#ffffff",
+          "display":"inline-block", "font-family":"sans-serif",
+          "font-size":"16px",       "line-height":"50px",
+          "text-align":"center",    "text-decoration":"none",
+          "-webkit-text-size-adjust":"none",
+          "mso-hide":"all"
+        };
+      },
+      htmlg: function (ev) {
+        var p = this.msoplaceholder;
+        Vue.nextTick(function () {
+          var html =  $("#fb_example").html().replace(p,$("#mso").val().replace(/\r?\n|\r/g, ""));
+          app.html_fb = html;
+          $("#fb").val(html);
+
+          var html =  $("#twitter_example").html().replace(p,$("#mso").val().replace(/\r?\n|\r/g, ""));
+          app.html_twitter = html;
+          $("#twitter").val(html);
+        });
+      },
+      copy: function() {
+        var v=this;
+        clipboard.copy(app.html).then(
+          function(){v.copied=true;},
+          function(err){console.log("failure", err);}
+        );
+      }
+    }
+  });
+      </script>
+    </body>
+  </html>
+
