@@ -3,4 +3,5 @@ node_modules/*
 **/node_modules
 ab/js/**/*.js
 !ab/js/vendor/*
-
+*~
+progress-bar-image/
