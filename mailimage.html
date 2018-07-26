@@ -3,14 +3,14 @@
   <head>
     <title>html for button in email Generator</title>
 <!-- inject:head:html -->
-                                <meta charset="utf-8">
+                                    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="dist/style.css" rel="stylesheet">
     <script src="dist/all.js"></script>
 
-                            <!-- endinject -->
+                                <!-- endinject -->
     <style>
       legend {
 	border: initial;
@@ -34,11 +34,12 @@
    
    <div>
       <ul class = "nav navbar-nav">
-         <li><a href ="mailbutton.html">Button in email</a></li>
-         <li><a href ="button.html">Button in website</a></li>
-         <li><a href ="mailimage.html">Image in email</a></li>
-         <li><a href ="sharebuttons.html">Share buttons</a></li>
-         <li><a href ="progress.html">Progress bars</a></li>        
+         <li><a href="mailbutton.html">Button in email</a></li>
+         <li><a href="button.html">Button in website</a></li>
+         <li><a href="mailimage.html">Image in email</a></li>
+         <li><a href="sharebuttons.html">Share buttons</a></li>
+         <li><a href="progress.html">Progress bars</a></li>        
+         <li><a href="widget.html">Speakout widget</a></li>        
       </ul>
    </div>
 </div>
@@ -119,10 +120,10 @@
 
           <h3>Result</h3>
 	    <div class="hidden" id="result-wrapper">
-	      <div>
+	      <figure>
 		<a :href="linkUrl"><img :src="imgUrl" :width="width" :alt="alt" :title="alt"/></a>
-		<legend v-if="legend" :style="legendStyle">{{ legend }}</legend>
-	      </div>
+		<figcaption v-if="legend" :style="legendStyle">{{ legend }}</figcaption>
+	      </figure>
 	    </div>
 
 	    <div id="example" class="well" style="overflow: hidden">
@@ -213,7 +214,7 @@ var app = new Vue({
   updated: function() {
       var $wrapper = $( '#result-wrapper').clone();
       if (!app.linkUrl) {
-	$wrapper.find('div').prepend($wrapper.find('a').detach().html());
+	$wrapper.find('figure').prepend($wrapper.find('a').detach().html());
       }
       $wrapper.children().attr('style', app.resultStyle);
       var html = $wrapper.html();
