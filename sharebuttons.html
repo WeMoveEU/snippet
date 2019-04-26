@@ -45,6 +45,20 @@
               <div class="btn-group" id="btn-generate"></div>
             </div>
             <div class="panel-body">
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.url_type)">
+                  <label class="control-label" for="url_type">URL type</label><br>
+                    <div class="btn-group" data-toggle="buttons" v-radio="url_type" v-on:click="htmlg()">
+                      <label class="btn btn-primary">
+                        <input type="radio" name="url_type" id="speakout" value="speakout"> Speakout campaign
+                      </label>
+                      <label class="btn btn-primary">
+                        <input type="radio" name="url_type" id="other" value="other"> Other URL
+                      </label>
+                    </div>
+                  <field-messages name="url_type" show="$touched || $submitted" class="help-block">
+                    <span slot="required">Pick an option</span>
+                  </field-messages>
+                </validate>                
                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.utm)">
                   <label class="control-label" for="utm">utm campaign</label>
                   <input type="text" required class="form-control" name="utm" id="utm" v-model="utm_campaign" v-on:input="htmlg()">
@@ -61,16 +75,16 @@
                 </validate>
                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.url)">
                   <label for="url" class="control-label">Url</label>
-                  <input type="url" placeholder="https://act.wemove.eu/..." required class="form-control" name="url" v-model="url" https-only v-on:input="htmlg()">
+                  <input type="url" v-bind:placeholder="urlPlaceholder" required class="form-control" name="url" v-model="url" https-only v-on:input="htmlg()">
                   <field-messages name="url" show="$touched || $submitted" class="help-block">
                     <span slot="required">You know a call to action should go somewhere, right?</span>
                      <div slot="url">This is not a valid url. you know, it should start with https://www.wemove.eu...</div>
                      <div slot="https-only">Dude! Security and privacy matter! It must start with https...</div>
                   </field-messages>
                 </validate>                
-                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.tweet)">
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.tweet)" v-if="url_type=='other'">
                   <label class="control-label" for="text">Tweet</label>
-                  <input  required type="text" class="form-control" name="tweet" v-model="tweet" v-on:input="htmlg()">
+                  <input required type="text" class="form-control" name="tweet" v-model="tweet" v-on:input="htmlg()">
                   <field-messages name="tweet" show="$touched || $submitted" class="help-block">
                     <span slot="required">Really? without a tweet?!</span>
                   </field-messages>
@@ -166,12 +180,39 @@ Vue.use(VueForm, {
   }
 });
   
+Vue.directive('radio', {
+  bind: function(el, binding, vnode) {
+      var btns = $(el).find('.btn');
+      btns.each(function() {
+          $(this).on('click', function() {
+              var v = $(this).find('input').get(0).value
+              app[binding.expression] = v;
+          })
+      });
+  },
+  update: function(el, binding, vnode) {
+      var value = binding.value;
+      if (value) {
+          //this.set(value);
+          var btns = $(el).find('.btn')
+          btns.each(function() {
+              $(this).removeClass('active');
+              var v = $(this).find('input').get(0).value;
+
+              if (v === value) {
+                  $(this).addClass('active');
+              }
+          });
+      }
+  }
+});
 
 var app = new Vue({
   el: '#app',
   data: {
     msoplaceholder:'<span id="msoplaceholder"></span>',
     formstate: {},
+    url_type: 'speakout',
     utm_campaign: "en_"+today(),
     mailingid: "",
     url: "",
@@ -186,15 +227,26 @@ var app = new Vue({
     name: 'Generate share buttons'
   },
     computed: {
+      urlPlaceholder: function () {
+        return this.url_type == 'speakout' ? "https://act.wemove.eu/..." : "https://www.wemove.eu/...";
+      },
       trackedUrl: function () {
         var separator  = this.url.indexOf("?") === -1 ? "?" : "&";
         return this.url + separator + "utm_campaign=" + this.utm_campaign + "&utm_source=civimail-" + this.mailingid;
       },
       fbUrl: function() {
-        return "https://www.facebook.com/sharer.php?u=" + encodeURIComponent(this.trackedUrl + "&utm_medium=facebook");
+        if (this.url_type == 'speakout') {
+          return this.trackedUrl + "&action=share&medium=facebook&submit";
+        } else {
+          return "https://www.facebook.com/sharer.php?u=" + encodeURIComponent(this.trackedUrl + "&utm_medium=facebook");
+        }
       },
       twitterUrl: function() {
-        return "https://twitter.com/intent/tweet?text=" + encodeURIComponent(this.tweet + ' ' + this.trackedUrl + "&utm_medium=twitter");
+        if (this.url_type == 'speakout') {
+          return this.trackedUrl + "&action=share&medium=twitter&submit";
+        } else {
+          return "https://twitter.com/intent/tweet?text=" + encodeURIComponent(this.tweet + ' ' + this.trackedUrl + "&utm_medium=twitter");
+        }
       },
       msostyle: function () {
         return {
