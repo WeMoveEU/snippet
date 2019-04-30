@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>html for button in email Generator</title>
+<!-- inject:head:html -->
+                                    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="dist/style.css" rel="stylesheet">
+    <script src="dist/all.js"></script>
+
+                                <!-- endinject -->
+</head>
+<body>
+
+  </head>
+  <body>
+<!-- inject:nav:html -->
+<nav class = "navbar navbar-default" role = "navigation">
+<div class="container-fluid">
+   
+   <div class = "navbar-header">
+      <a class = "navbar-brand" href = "index.html">Code snippets</a>
+   </div>
+   
+   <div>
+      <ul class = "nav navbar-nav">
+         <li><a href="mailbutton.html">Button in email</a></li>
+         <li><a href="button.html">Button in website</a></li>
+         <li><a href="mailimage.html">Image in email</a></li>
+         <li><a href="sharebuttons.html">Share buttons</a></li>
+         <li><a href="progress.html">Progress bars</a></li>        
+         <li><a href="widget.html">Speakout widget</a></li>        
+      </ul>
+   </div>
+</div>
+</nav>
+
+<!-- endinject -->
+    <div id="app" class="container" role="main">
+      <div class="row">
+        <div class="col-md-6"><vue-form v-on:submit.prevent="copy" :state="formstate">
+          <div class="panel panel-default">
+            <div class="panel-heading">{{ name }}</div>
+            <div class="panel-body">
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.url)">
+                  <label for="url" class="control-label">Url</label>
+                  <input type="url" placeholder="https://act.wemove.eu/campaigns/xxx" required class="form-control" name="url" v-model="url" https-only>
+                  <field-messages name="url" show="$touched || $submitted" class="help-block">
+                    <span slot="required">You know a call to action should go somewhere, right?</span>
+                     <div slot="url">This is not a valid url. you know, it should start with https://act.wemove.eu...</div>
+                     <div slot="https-only">Dude! Security and privacy matter! It must start with https...</div>
+                  </field-messages>
+                </validate>
+
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.utm_campaign)">
+                  <label class="control-label" for="utm_campaign">utm campaign</label>
+                  <input type="text" required class="form-control" name="utm_campaign" id="utm_campaign" v-model="utm_campaign">
+                  <field-messages name="utm_campaign" show="$touched || $submitted" class="help-block">
+                    <span slot="required">utm campaign is a required field</span>
+                  </field-messages>
+                </validate>
+
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.utm_source)">
+                  <label class="control-label" for="utm_source">utm source</label>
+                  <input type="text" required class="form-control" name="utm_source" id="utm_source" v-model="utm_source">
+                  <field-messages name="utm_source" show="$touched || $submitted" class="help-block">
+                    <span slot="required">utm source is a required field</span>
+                  </field-messages>
+                </validate>
+
+            </div>
+
+            <div class="panel-footer">
+              <button type="submit" class="button btn-primary" id="copy" v-on:click="htmlg()">Generate & Copy</button>
+              <span class="text-success pull-right" v-if="copied">And paste it where due.</span>
+            </div>
+          </div>
+        </form></div>
+
+        <div class="col-md-6">
+            <h3>Result</h3>
+            <div id="example" class="well">
+
+              <iframe :src="trackedUrl" width="450" height="500" frameborder="0"></iframe>
+
+            </div>
+
+            <h3>Html Code</h3>
+            <textarea id="html" class="form-control">{{ html }}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <script>
+'use strict';
+
+
+var today= function () {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+
+  if(dd<10) {
+      dd='0'+dd
+  } 
+
+  if(mm<10) {
+      mm='0'+mm
+  } 
+
+  return yyyy+mm+dd;
+};
+
+Vue.use(VueForm, {
+  validators: {
+    'https-only': function (value, attrValue, vnode) {
+      return (value.indexOf("https://") == 0);
+    }
+  },
+  inputClasses: {
+    valid: 'form-control-success',
+    invalid: 'form-control-danger'
+  }
+});
+
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    formstate: {},
+    utm_campaign: '',
+    utm_source: '',
+    url: 'https://act.wemove.eu/campaigns/beyond-coal',
+    copied: false,
+    html: "set the url, and click on copy. you can then paste your html code in civimail ",
+    name: "HTML code for a Speakout widget"
+  },
+  computed: {
+    trackedUrl: function () {
+      var separator  = this.url.indexOf("?") === -1 ? "?" : "&";
+      return this.url + separator + "utm_campaign=" + this.utm_campaign + '&utm_medium=widget&utm_source=' + this.utm_source;
+    }
+  },
+  methods: {
+    fieldClassName: function (field) {
+      if(!field) {
+        return '';
+      }
+      if((field.$touched || field.$submitted) && field.$valid) {
+        return 'has-success';
+      }
+      if((field.$touched || field.$submitted) && field.$invalid) {
+        return 'has-error';
+      }
+    },
+    htmlg: function (ev) {
+      Vue.nextTick(function () {
+        var html =  $("#example").html().replace(/&amp;/g, '&');
+        app.html = html;
+        $("#html").val(html);
+      });
+    },
+    copy: function() {
+      var v=this;
+      clipboard.copy(app.html).then(
+        function(){v.copied=true;},
+        function(err){console.log("failure", err);}
+      );
+    }
+  }
+});
+    </script>
+  </body>
+</html>
+
